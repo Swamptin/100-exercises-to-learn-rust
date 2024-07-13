@@ -11,13 +11,12 @@ pub struct Ticket {
 
 impl Ticket {
     pub fn new(title: String, description: String, status: String) -> Ticket {
-        //if title.is_empty() {
-        //    panic!("title cannot be empty");
-        //}
-        //if title.len() > 50 {
-        //    panic!("title cannot be longer than 50 bytes");
-        //}
-        validate_title(title);
+        if title.is_empty() {
+            panic!("title cannot be empty");
+        }
+        if title.len() > 50 {
+            panic!("title cannot be longer than 50 bytes");
+        }
         if description.is_empty() {
             panic!("Description cannot be empty");
         }
@@ -35,15 +34,6 @@ impl Ticket {
         }
     }
 
-    fn validate_title(self: &title) {
-        if &title.is_empty() {
-            panic!("Title cannot be empty");
-        }
-        if &title.len() > 50 {
-            panic!("Title cannot be longer than 50 bytes");
-        }
-    }
-
     pub fn title(&self) -> &String {
         &self.title
     }
@@ -56,8 +46,42 @@ impl Ticket {
         &self.status
     }
 
-    pub fn set_title(&mut self, title: &str){
+    // My set methods
+    // This could definitely be tidied up. We're doing validation that could be put in it's own method.
+    pub fn set_title(&mut self, title: String){
+        check_title(self, title);
         self.title = title
+    }
+
+    pub fn set_description(&mut self, description: String){
+        check_description(self, &description);
+        self.description = description
+    }
+
+    pub fn set_status(&mut self, status: String){
+        if status != "To-Do" && status != "In Progress" && status != "Done" {
+            panic!("Only `To-Do`, `In Progress`, and `Done` statuses are allowed");
+        }
+        self.status = status
+    }
+
+    // Attempt at a validation section for description and status
+    fn check_description(&self, &description: String){
+        if description.is_empty() {
+            panic!("Description cannot be empty");
+        }
+        if description.len() > 500 {
+            panic!("Description cannot be longer than 500 bytes");
+        }
+    }
+
+    fn check_title(&self, title: String){
+        if title.is_empty() {
+            panic!("title cannot be empty");
+        }
+        if title.len() > 50 {
+            panic!("title cannot be longer than 50 bytes");
+        }
     }
 }
 
